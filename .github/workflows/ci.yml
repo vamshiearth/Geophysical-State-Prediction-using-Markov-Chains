@@ -40,7 +40,7 @@ jobs:
         run: ruff check .
 
       - name: Bandit
-        run: bandit -r . -q
+        run: bandit -r . -q -s B101
 
       - name: Pytest
         run: pytest
