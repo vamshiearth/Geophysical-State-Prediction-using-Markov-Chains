@@ -1,0 +1,143 @@
+.top-nav-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(6px);
+  background: rgba(6, 12, 22, 0.92);
+  border-bottom: 1px solid rgba(130, 138, 150, 0.24);
+}
+
+.top-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.top-nav__link {
+  text-decoration: none;
+  color: var(--text-soft);
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.top-nav__link:hover {
+  color: var(--text-primary);
+  border-color: rgba(116, 126, 140, 0.45);
+  background: transparent;
+}
+
+.top-nav__link--active {
+  color: #dbe2ed;
+  border-color: rgba(130, 140, 158, 0.6);
+  background: transparent;
+}
+
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2rem;
+}
+
+.home-panel,
+.module-hero,
+.module-note,
+.swatch-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(20, 30, 44, 0.95), rgba(12, 18, 29, 0.95));
+  box-shadow: 0 8px 18px rgba(2, 6, 12, 0.35);
+}
+
+.home-panel,
+.module-hero,
+.module-note {
+  padding: 1.2rem 1.3rem;
+}
+
+.home-panel h1,
+.module-hero h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+}
+
+.home-panel p,
+.module-hero p,
+.module-note p {
+  color: var(--text-soft);
+  margin: 0.65rem 0 0;
+}
+
+.module-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.swatch-card {
+  padding: 1rem;
+}
+
+.swatch-card h2 {
+  margin: 0 0 0.7rem;
+  font-size: 1.05rem;
+  color: var(--text-soft);
+}
+
+.swatch {
+  min-height: 160px;
+  border-radius: 9px;
+  border: 1px solid rgba(136, 146, 161, 0.3);
+}
+
+.swatch--solar-1 {
+  background: linear-gradient(135deg, #29303a, #1f252e);
+}
+
+.swatch--solar-2 {
+  background: linear-gradient(135deg, #3a4451, #2b333e);
+}
+
+.swatch--solar-3 {
+  background: linear-gradient(135deg, #4c5968, #384350);
+}
+
+.swatch--drought-1 {
+  background: linear-gradient(135deg, #443d33, #2f2a23);
+}
+
+.swatch--drought-2 {
+  background: linear-gradient(135deg, #5b5145, #413930);
+}
+
+.swatch--drought-3 {
+  background: linear-gradient(135deg, #6c6154, #4e463c);
+}
+
+.swatch--geomagnetic-1 {
+  background: linear-gradient(135deg, #2f3f3c, #202b29);
+}
+
+.swatch--geomagnetic-2 {
+  background: linear-gradient(135deg, #3a4f4a, #2a3935);
+}
+
+.swatch--geomagnetic-3 {
+  background: linear-gradient(135deg, #4a635d, #374a45);
+}
+
+@media (max-width: 860px) {
+  .swatch-grid {
+    grid-template-columns: 1fr;
+  }
+}

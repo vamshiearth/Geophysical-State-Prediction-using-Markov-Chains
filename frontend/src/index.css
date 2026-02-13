@@ -1,0 +1,35 @@
+:root {
+  --bg-main: #090f18;
+  --bg-deep: #050910;
+  --line-soft: rgba(136, 155, 178, 0.32);
+  --text-primary: #e7edf7;
+  --text-soft: #b9c5d7;
+  font-family: "Rajdhani", "Trebuchet MS", "Segoe UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--text-primary);
+  background:
+    radial-gradient(circle at 14% 16%, rgba(35, 41, 52, 0.28), transparent 44%),
+    radial-gradient(circle at 84% 8%, rgba(30, 35, 44, 0.2), transparent 40%),
+    linear-gradient(180deg, var(--bg-main), var(--bg-deep));
+}
+
+#root {
+  min-height: 100vh;
+}
