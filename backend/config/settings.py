@@ -20,9 +20,6 @@ INSTALLED_APPS = [
     "corsheaders",
 
     "solar",
-    "drought",
-    "geomagnetic",
-    "markov_core",
 ]
 
 MIDDLEWARE = [

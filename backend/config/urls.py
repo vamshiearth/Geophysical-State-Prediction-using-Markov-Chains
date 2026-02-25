@@ -13,8 +13,6 @@ def api_root(_request):
             "endpoints": [
                 "/admin/",
                 "/api/solar/",
-                "/api/drought/",
-                "/api/geomagnetic/",
             ],
         }
     )
@@ -25,6 +23,4 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
 
     path("api/solar/", include("solar.urls")),
-    path("api/drought/", include("drought.urls")),
-    path("api/geomagnetic/", include("geomagnetic.urls")),
 ]
