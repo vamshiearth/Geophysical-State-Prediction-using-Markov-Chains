@@ -270,7 +270,10 @@ def geocode(request):
         lat = float(first.get("lat"))
         lon = float(first.get("lon"))
     except (TypeError, ValueError):
-        return Response({"error": "Upstream geocoder returned invalid coordinates."}, status=HTTP_502_BAD_GATEWAY)
+        return Response(
+            {"error": "Upstream geocoder returned invalid coordinates."},
+            status=HTTP_502_BAD_GATEWAY,
+        )
 
     address = first.get("address", {})
     place_name = (
@@ -283,7 +286,12 @@ def geocode(request):
         or first.get("display_name")
         or "Selected location"
     )
-    region = ", ".join([value for value in [address.get("state"), address.get("country")] if value]) or "Unknown region"
+    region = (
+        ", ".join(
+            [value for value in [address.get("state"), address.get("country")] if value]
+        )
+        or "Unknown region"
+    )
 
     return Response(
         {
@@ -323,14 +331,20 @@ def download_csv(request):
     end_ymd = _format_ymd(daily_end)
 
     try:
-        daily_series_map = _fetch_nasa_series("daily", lat, lon, start_ymd, end_ymd, SOLAR_PARAMETERS)
+        daily_series_map = _fetch_nasa_series(
+            "daily", lat, lon, start_ymd, end_ymd, SOLAR_PARAMETERS
+        )
     except requests.RequestException as exc:
         return Response(
             {"error": "Failed to fetch NASA POWER data.", "details": str(exc)},
             status=HTTP_502_BAD_GATEWAY,
         )
 
-    primary_rows = [(k, float(v)) for k, v in sorted(daily_series_map.get(PARAMETER, {}).items()) if float(v) != -999.0]
+    primary_rows = [
+        (k, float(v))
+        for k, v in sorted(daily_series_map.get(PARAMETER, {}).items())
+        if float(v) != -999.0
+    ]
     csv_buffer = StringIO()
     headers = ["date"] + [f"{param.lower()}_kwh_m2_day" for param in SOLAR_PARAMETERS]
     csv_buffer.write(",".join(headers) + "\n")
