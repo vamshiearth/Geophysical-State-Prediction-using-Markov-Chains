@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { BrowserRouter, Routes, Route, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import SolarRadiationPage from "./pages/SolarPage";
@@ -169,21 +169,12 @@ function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const isMapPage = location.pathname === "/map";
-  const [mapSearch, setMapSearch] = useState("");
   const mapSearchInputRef = useRef(null);
-
-  useEffect(() => {
-    if (!isMapPage) {
-      setMapSearch("");
-      return;
-    }
-    const q = new URLSearchParams(location.search).get("q") || "";
-    setMapSearch(q);
-  }, [isMapPage, location.search]);
+  const mapSearchQuery = isMapPage ? new URLSearchParams(location.search).get("q") || "" : "";
 
   function onMapSearchSubmit(event) {
     event.preventDefault();
-    const query = mapSearch.trim();
+    const query = (mapSearchInputRef.current?.value || "").trim();
     mapSearchInputRef.current?.blur();
     if (!query) {
       navigate("/map");
@@ -244,11 +235,11 @@ function AppLayout() {
             {isMapPage ? (
               <form className="top-nav__search-wrap" onSubmit={onMapSearchSubmit}>
                 <input
+                  key={mapSearchQuery}
                   ref={mapSearchInputRef}
                   type="text"
                   className="top-nav__search"
-                  value={mapSearch}
-                  onChange={(event) => setMapSearch(event.target.value)}
+                  defaultValue={mapSearchQuery}
                   placeholder="Search locations"
                   aria-label="Search places"
                 />

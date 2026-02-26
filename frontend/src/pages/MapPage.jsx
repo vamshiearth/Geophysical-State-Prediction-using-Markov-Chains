@@ -499,8 +499,9 @@ export default function MapPage() {
         if (controller.signal.aborted || err?.name === "AbortError") return;
         setSummaryError("buffering");
       } finally {
-        if (controller.signal.aborted) return;
-        setSummaryLoading(false);
+        if (!controller.signal.aborted) {
+          setSummaryLoading(false);
+        }
       }
     }
 
@@ -718,8 +719,9 @@ export function MapDetailPage() {
         if (controller.signal.aborted || err?.name === "AbortError") return;
         setSeriesError("buffering");
       } finally {
-        if (controller.signal.aborted) return;
-        setSeriesLoading(false);
+        if (!controller.signal.aborted) {
+          setSeriesLoading(false);
+        }
       }
     }
 

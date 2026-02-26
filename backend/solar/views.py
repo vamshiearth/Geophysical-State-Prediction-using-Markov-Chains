@@ -32,6 +32,11 @@ NOMINATIM_URL = "https://nominatim.openstreetmap.org/reverse"
 NOMINATIM_SEARCH_URL = "https://nominatim.openstreetmap.org/search"
 TZ_FINDER = TimezoneFinder() if TimezoneFinder else None
 
+HTTP_400_BAD_REQUEST = getattr(status, "HTTP_400_BAD_REQUEST", 400)
+HTTP_404_NOT_FOUND = getattr(status, "HTTP_404_NOT_FOUND", 404)
+HTTP_422_UNPROCESSABLE_ENTITY = getattr(status, "HTTP_422_UNPROCESSABLE_ENTITY", 422)
+HTTP_502_BAD_GATEWAY = getattr(status, "HTTP_502_BAD_GATEWAY", 502)
+
 
 def _format_ymd(dt: datetime) -> str:
     return dt.strftime("%Y%m%d")
@@ -104,7 +109,7 @@ def summary(request):
             {
                 "error": "Invalid payload. Expected lat/lon plus optional years (1-20)."
             },
-            status=status.HTTP_400_BAD_REQUEST,
+            status=HTTP_400_BAD_REQUEST,
         )
 
     now_utc = datetime.now(tz=UTC)
@@ -123,7 +128,7 @@ def summary(request):
     except requests.RequestException as exc:
         return Response(
             {"error": "Failed to fetch NASA POWER data.", "details": str(exc)},
-            status=status.HTTP_502_BAD_GATEWAY,
+            status=HTTP_502_BAD_GATEWAY,
         )
 
     hourly_raw = hourly_series_map.get(PARAMETER, {})
@@ -135,7 +140,7 @@ def summary(request):
     if len(daily_items) < 1:
         return Response(
             {"error": "Insufficient daily data at this location."},
-            status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status=HTTP_422_UNPROCESSABLE_ENTITY,
         )
 
     latest_hour_ts, latest_hour_val = hourly_items[-1] if hourly_items else (None, None)
@@ -180,13 +185,13 @@ def reverse_geocode(request):
     except (TypeError, ValueError):
         return Response(
             {"error": "Invalid query params. Expected lat and lon as numbers."},
-            status=status.HTTP_400_BAD_REQUEST,
+            status=HTTP_400_BAD_REQUEST,
         )
 
     if not (-90 <= lat <= 90 and -180 <= lon <= 180):
         return Response(
             {"error": "Latitude or longitude out of range."},
-            status=status.HTTP_400_BAD_REQUEST,
+            status=HTTP_400_BAD_REQUEST,
         )
 
     try:
@@ -201,7 +206,7 @@ def reverse_geocode(request):
     except requests.RequestException as exc:
         return Response(
             {"error": "Failed to reverse geocode location.", "details": str(exc)},
-            status=status.HTTP_502_BAD_GATEWAY,
+            status=HTTP_502_BAD_GATEWAY,
         )
 
     address = data.get("address", {})
@@ -234,7 +239,7 @@ def geocode(request):
     if len(query) < 2:
         return Response(
             {"error": "Invalid query. Provide q with at least 2 characters."},
-            status=status.HTTP_400_BAD_REQUEST,
+            status=HTTP_400_BAD_REQUEST,
         )
 
     try:
@@ -254,18 +259,18 @@ def geocode(request):
     except requests.RequestException as exc:
         return Response(
             {"error": "Failed to geocode location.", "details": str(exc)},
-            status=status.HTTP_502_BAD_GATEWAY,
+            status=HTTP_502_BAD_GATEWAY,
         )
 
     if not items:
-        return Response({"error": "No location found for query."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "No location found for query."}, status=HTTP_404_NOT_FOUND)
 
     first = items[0]
     try:
         lat = float(first.get("lat"))
         lon = float(first.get("lon"))
     except (TypeError, ValueError):
-        return Response({"error": "Upstream geocoder returned invalid coordinates."}, status=status.HTTP_502_BAD_GATEWAY)
+        return Response({"error": "Upstream geocoder returned invalid coordinates."}, status=HTTP_502_BAD_GATEWAY)
 
     address = first.get("address", {})
     place_name = (
@@ -300,16 +305,16 @@ def download_csv(request):
     except (TypeError, ValueError):
         return Response(
             {"error": "Invalid query params. Expected lat, lon and optional years."},
-            status=status.HTTP_400_BAD_REQUEST,
+            status=HTTP_400_BAD_REQUEST,
         )
 
     if not (-90 <= lat <= 90 and -180 <= lon <= 180):
         return Response(
             {"error": "Latitude or longitude out of range."},
-            status=status.HTTP_400_BAD_REQUEST,
+            status=HTTP_400_BAD_REQUEST,
         )
     if not (1 <= years <= 20):
-        return Response({"error": "years must be between 1 and 20."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "years must be between 1 and 20."}, status=HTTP_400_BAD_REQUEST)
 
     now_utc = datetime.now(tz=UTC)
     daily_end = now_utc - timedelta(days=1)
@@ -322,7 +327,7 @@ def download_csv(request):
     except requests.RequestException as exc:
         return Response(
             {"error": "Failed to fetch NASA POWER data.", "details": str(exc)},
-            status=status.HTTP_502_BAD_GATEWAY,
+            status=HTTP_502_BAD_GATEWAY,
         )
 
     primary_rows = [(k, float(v)) for k, v in sorted(daily_series_map.get(PARAMETER, {}).items()) if float(v) != -999.0]
